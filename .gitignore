@@ -7,4 +7,4 @@ __pycache__/
 #secret keys
 secret.json
 
-app/main/files/*
+app/main/files/data.xlsx
