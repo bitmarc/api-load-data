@@ -87,9 +87,10 @@ class UploadDataset(Resource):
             return {'message': 'file no valid'}
         filename=secure_filename(file.filename)
         file.save(os.path.join(UPLOAD_FILES_FOLDER, 'data.xlsx'))
-        print('file {} recived, reading...'.format(filename))
+        print('- file "{}" recived, reading...'.format(filename))
         df = parse_xlsx(os.path.join(UPLOAD_FILES_FOLDER, 'data.xlsx'))
-        print('file {} migrating...'.format(filename))
+        print('- file "{}" prepare migration...'.format(filename))
+        employees=[]
         for index, row in df.iterrows():
             name = row['name']
             birth_date = row['birth_date']
@@ -112,9 +113,10 @@ class UploadDataset(Resource):
                 driver_license_validity=driver_license_validity,
                 person=person
             )
-            db.session.add(person)
-            db.session.add(contract)
-        print('commiting...')
+            employees.append(contract)
+        db.session.add_all(employees)
+        # "bulk_save_objects" is too low level api to this case with relationships
+        print('- commiting...')
         db.session.commit()
         print('ok')
         return {'message': 'file saved and uploaded succesfully!'}
