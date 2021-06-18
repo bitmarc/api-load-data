@@ -1,0 +1,10 @@
+#python
+__pycache__/
+
+# Flask
+.vscode/
+
+#secret keys
+secret.json
+
+app/main/files/*
